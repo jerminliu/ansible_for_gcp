@@ -1,0 +1,52 @@
+--- # Docker Install
+
+- hosts: gcp
+  remote_user: "{{ gcp_user }}"
+  become: yes
+  vars_files:
+  - files/gcpcreds.yml 
+  tasks:
+
+  - name: remove centos default docker installation
+    yum: pkg={{ item }} state=removed
+    with_items:
+      - docker
+      - docker-common
+      - docker-engine
+      - docker-engine-selinux
+
+  - name: install docker-repo
+    template:
+      src: files/docker.repo.j2
+      dest: /etc/yum.repos.d/docker.repo
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: install epel repos
+    yum: pkg={{ item }} state=present
+    with_items:
+      - epel-release
+
+  - name: update all packages
+    yum: pkg=* state=latest
+
+  - name: install docker-engine
+    yum: pkg=docker-engine state=present update_cache=yes
+
+  - name: create docker group
+    group:
+      name: docker 
+      state: present
+
+  - name: add docker user to docker group
+    user:
+      name: "{{ gcp_user }}"
+      append: yes
+      groups: docker
+
+  - name: start/enable docker
+    service:
+      name: docker
+      state: started
+      enabled: yes

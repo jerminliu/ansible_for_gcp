@@ -1,0 +1,4 @@
+--- # Master Playbook
+
+- include: playbooks/create_gcp_instance.yml
+- include: playbooks/install.docker.yml
