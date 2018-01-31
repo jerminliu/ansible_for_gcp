@@ -27,7 +27,7 @@
     - name: wait for ssh to come up
       wait_for:
         host: "{{ item.public_ip }}"
-        delay: 1
+        delay: 30
         port: 22
         state: started
         timeout: 60
