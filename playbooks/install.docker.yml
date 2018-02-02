@@ -24,12 +24,12 @@
       mode: 0644
 
   - name: install epel repos
-    yum: pkg={{ item }} state=present
+    yum: pkg={{ item }} state=present update_cache=yes
     with_items:
       - epel-release
 
-  - name: update all packages
-    yum: pkg=* state=latest
+  #- name: update all packages
+  #  yum: pkg=* state=latest
 
   - name: install docker-engine
     yum: pkg=docker-engine state=present update_cache=yes
