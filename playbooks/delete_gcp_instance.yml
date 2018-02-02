@@ -1,0 +1,24 @@
+--- 
+
+- hosts: local
+  connection: local
+  become: yes
+  gather_facts: false
+
+  vars:
+    service_account_email: 435207003416-compute@developer.gserviceaccount.com
+    credentials_file: files/campbigfalcon-3efb7a22f475.json
+    project_id: campbigfalcon-179100
+    machine_type: n1-standard-1
+    image: centos-7
+
+  tasks:
+    - name: delete instance
+      gce:
+        instance_names: docker
+        machine_type: "{{ machine_type }}"
+        image: "{{ image }}"
+        service_account_email: "{{ service_account_email }}"
+        credentials_file: "{{ credentials_file }}"
+        project_id: "{{ project_id }}"
+        state: deleted
