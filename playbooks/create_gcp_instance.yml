@@ -11,11 +11,14 @@
     project_id: campbigfalcon-179100
     machine_type: n1-standard-1
     image: centos-7
+    instance_name: docker
+    instance_count: 1
 
   tasks:
     - name: spawn instance
       gce:
-        instance_names: docker
+        name: "{{ instance_name }}"
+        num_instances: "{{ instance_count }}"
         machine_type: "{{ machine_type }}"
         image: "{{ image }}"
         service_account_email: "{{ service_account_email }}"
@@ -23,6 +26,9 @@
         project_id: "{{ project_id }}"
         tags: http-server,https-server
       register: gce
+
+    - debug:
+        msg: "{{ gce }}"
 
     - name: wait for ssh to come up
       wait_for:

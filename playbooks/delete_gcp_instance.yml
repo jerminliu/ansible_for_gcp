@@ -11,14 +11,16 @@
     project_id: campbigfalcon-179100
     machine_type: n1-standard-1
     image: centos-7
+    instance_name: docker
+    instance_count: 1
 
   tasks:
     - name: delete instance
       gce:
-        instance_names: docker
-        machine_type: "{{ machine_type }}"
-        image: "{{ image }}"
+        name: "{{ instance_name }}"
+        num_instances: "{{ instance_count }}"
         service_account_email: "{{ service_account_email }}"
         credentials_file: "{{ credentials_file }}"
         project_id: "{{ project_id }}"
         state: deleted
+      register: gce
